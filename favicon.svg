@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1051)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(10.9375,0,0,10.9375,150,150)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="64" height="64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- 红球 -->
+  <circle cx="24" cy="32" r="20" fill="#e74c3c"></circle>
+  <!-- 蓝球，向右偏移，与红球重叠 -->
+  <circle cx="40" cy="32" r="20" fill="#3498db"></circle>
+</svg></svg></g></g><defs><clipPath id="SvgjsClipPath1051"><rect width="1000" height="1000" x="0" y="0" rx="250" ry="250"></rect></clipPath></defs></svg>
