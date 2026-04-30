@@ -30,6 +30,7 @@
         }
         .red { background-color: #e74c3c; }
         .blue { background-color: #3498db; }
+        .green { background-color: #27ae60; }
         .main { min-height: 70vh}
     </style>
 </head>
@@ -63,6 +64,12 @@
                     <input type="radio" class="form-check-input" name="mode" value="6+5" id="6Red5Blue">
                     <label class="form-check-label" for="6Red5Blue">
                         6个红球 + 5个蓝球
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="mode" value="toto" id="toto">
+                    <label class="form-check-label" for="toto">
+                        TOTO
                     </label>
                 </div>
             </div>
@@ -131,6 +138,16 @@
                 }
                 blueNumbers = shuffleArray(blueNumbers);
                 blueBalls = blueNumbers.slice(0, 5).sort((a, b) => a - b);
+            } else if (mode === 'toto') {
+                // TOTO: 从1-49选6个球
+                let totoNumbers = [];
+                for (let i = 1; i <= 49; i++) {
+                    totoNumbers.push(i);
+                }
+                totoNumbers = shuffleArray(totoNumbers);
+                const totoBalls = totoNumbers.slice(0, 6).sort((a, b) => a - b);
+                displayNumbers(totoBalls, [], 'toto');
+                return;
             }
             displayNumbers(redBalls, blueBalls);
         });
@@ -143,7 +160,7 @@
             return array;
         }
 
-        function displayNumbers(redBalls, blueBalls) {
+        function displayNumbers(redBalls, blueBalls, mode = '') {
             document.getElementById('result').style.display = 'block';
             const redBallsDiv = document.getElementById('redBalls');
             const blueBallsDiv = document.getElementById('blueBalls');
@@ -151,7 +168,7 @@
             blueBallsDiv.innerHTML = '';
             redBalls.forEach(num => {
                 const ball = document.createElement('div');
-                ball.className = 'ball red';
+                ball.className = 'ball ' + (mode === 'toto' ? 'green' : 'red');
                 ball.textContent = num.toString().padStart(2, '0');
                 redBallsDiv.appendChild(ball);
             });
