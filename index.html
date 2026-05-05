@@ -8,48 +8,240 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="幸运生成器" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0; user-scalabl=0;">
-    <title>双色球号码生成器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运彩票号码生成器</title>
     <!-- 引入 Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- 引入 Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <style>
+        /* ===== 全局背景与字体 ===== */
+        * { box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #e8eaf6 0%, #f3e5f5 25%, #fce4ec 50%, #e8eaf6 75%, #ede7f6 100%);
+            background-size: 400% 400%;
+            animation: bgShift 20s ease infinite;
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        @keyframes bgShift {
+            0%,100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        /* 装饰性背景光晕 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px; right: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(186,104,200,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -150px; left: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(100,149,237,0.07) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== 导航栏 Glass 化 ===== */
+        .navbar {
+            background: rgba(255,255,255,0.55) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            color: #5c4d7d !important;
+        }
+
+        /* ===== 玻璃卡片 ===== */
+        .glass-card {
+            background: rgba(255,255,255,0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            padding: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== 主区域 ===== */
+        .main {
+            min-height: 70vh;
+            position: relative;
+            z-index: 1;
+        }
+        .main h1 {
+            color: #4a3f6b;
+            font-weight: 700;
+        }
+        .main > p {
+            color: #7b6f9e !important;
+        }
+
+        /* ===== 表单控件 ===== */
+        .form-label {
+            color: #5c4d7d;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .form-control {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 10px;
+            color: #3d3355;
+            padding: 0.6rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control::placeholder {
+            color: #b0a8c8;
+        }
+        .form-control:focus {
+            background: rgba(255,255,255,0.9);
+            border-color: #b39ddb;
+            box-shadow: 0 0 0 0.25rem rgba(179,157,219,0.2);
+            color: #3d3355;
+        }
+        .form-check-label {
+            color: #5c4d7d;
+        }
+        .form-check-input:checked {
+            background-color: #ce93d8;
+            border-color: #ce93d8;
+        }
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(206,147,216,0.25);
+        }
+        .text-secondary {
+            color: #a099b8 !important;
+        }
+
+        /* ===== 按钮渐变 ===== */
+        .btn-primary {
+            background: linear-gradient(135deg, #ce93d8 0%, #f48fb1 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.7rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 16px rgba(206,147,216,0.3);
+            transition: all 0.35s cubic-bezier(0.25,0.8,0.25,1.2);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(206,147,216,0.45);
+            background: linear-gradient(135deg, #dba4e0 0%, #f6a0bd 100%);
+            color: #fff;
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(206,147,216,0.3);
+        }
+
+        /* ===== 号码球 3D 效果 ===== */
         .balls {
             margin-top: 20px;
             text-align: center;
         }
+        .balls h2 {
+            color: #4a3f6b;
+            font-weight: 700;
+        }
         .ball {
             display: inline-block;
-            width: 60px; height: 60px;
-            line-height: 60px;
+            width: 65px; height: 65px;
+            line-height: 65px;
             border-radius: 50%;
-            color: white; font-weight: bold;
-            margin: 5px; font-size: 24px;
+            color: #fff;
+            font-weight: 700;
+            margin: 6px;
+            font-size: 26px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15), inset 0 -4px 8px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: scale(0);
+            animation: ballPopIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        .red { background-color: #e74c3c; }
-        .blue { background-color: #3498db; }
-        .green { background-color: #27ae60; }
-        .main { min-height: 70vh}
+        .red {
+            background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
+        }
+        .blue {
+            background: radial-gradient(circle at 35% 35%, #74b9ff, #2471a3);
+        }
+        .green {
+            background: radial-gradient(circle at 35% 35%, #f8bbd0, #c2185b);
+        }
+
+        /* 球体弹入动画 */
+        @keyframes ballPopIn {
+            0% { opacity: 0; transform: scale(0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* ===== 页脚 ===== */
+        .footer {
+            position: relative;
+            z-index: 1;
+        }
+        .footer footer {
+            border-top: 1px solid rgba(0,0,0,0.08) !important;
+        }
+        .footer span {
+            color: #a099b8 !important;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 576px) {
+            .glass-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+            .ball {
+                width: 50px; height: 50px;
+                line-height: 50px;
+                font-size: 20px;
+                margin: 4px;
+            }
+            .main h1 { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">双色球号码生成器</a>
+            <a class="navbar-brand" href="#">幸运彩票号码生成器</a>
         </div>
     </nav>
     <div class="main container mt-5  mb-5">
-        <h1 class="text-center">欢迎使用双色球号码生成器</h1>
+        <h1 class="text-center">欢迎使用幸运彩票号码生成器</h1>
         <p class="text-center text-muted">请输入您的幸运字符和日期，我们会将您的输入作为随机数种子，为您生成属于您的幸运号码！</p>
-        <form id="numberForm" class="container mt-5 col-lg-6 col-md-8">
+        <form id="numberForm" class="container mt-5 col-lg-6 col-md-8 glass-card">
             <div class="mb-4">
-                <label class="form-label">请输入您的幸运字符（e.g., 名字）：</label>
-                <input type="text" name="name" class="form-control" placeholder="姓名" required>
+                <label class="form-label">请输入您的幸运字符（e.g., 今天吃了什么）：</label>
+                <input type="text" name="name" class="form-control" placeholder="大饼" required>
             </div>
             <div class="mb-4">
-                <label class="form-label">请输入您的幸运日期 (e.g., 生日)：</label>
+                <label class="form-label">请输入您的幸运日期 (e.g., 值得纪念的日子)：</label>
                 <input type="text" name="birthday" class="form-control" placeholder="例如：19900101" required>
             </div>
             <div class="mb-4">
@@ -85,18 +277,22 @@
         </div>
     </div>
     <div class="container footer">
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <div class="col-md-4 d-flex align-items-center">
-                <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Ricky Lee</span>
+        <footer class="py-3 my-4 border-top">
+            <div class="d-flex align-items-center">
+                <span class="text-body-secondary">© 2024 - 2026 Ricky Lee</span>
+                <a class="text-body-secondary ms-3 icon-link" href="https://github.com/rickylsr/lucky-generator" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                    </svg>
+                   源代码
+                </a>
             </div>
-            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-            </ul>
       </footer>
     </div>
     <!-- 引入必要的 JS 库 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <!-- 引入 SHA-256 和 seedrandom 库 -->
-    <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/src/sha256.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.11.1/src/sha256.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/seedrandom@3.0.5/seedrandom.min.js"></script>
     <!-- 引入 Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -166,15 +362,17 @@
             const blueBallsDiv = document.getElementById('blueBalls');
             redBallsDiv.innerHTML = '';
             blueBallsDiv.innerHTML = '';
-            redBalls.forEach(num => {
+            redBalls.forEach((num, i) => {
                 const ball = document.createElement('div');
                 ball.className = 'ball ' + (mode === 'toto' ? 'green' : 'red');
+                ball.style.animationDelay = (i * 0.1) + 's';
                 ball.textContent = num.toString().padStart(2, '0');
                 redBallsDiv.appendChild(ball);
             });
-            blueBalls.forEach(num => {
+            blueBalls.forEach((num, i) => {
                 const ball = document.createElement('div');
                 ball.className = 'ball blue';
+                ball.style.animationDelay = ((redBalls.length + i) * 0.1) + 's';
                 ball.textContent = num.toString().padStart(2, '0');
                 blueBallsDiv.appendChild(ball);
             });
